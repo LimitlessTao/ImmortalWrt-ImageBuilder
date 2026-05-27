@@ -62,7 +62,6 @@ PACKAGES="$PACKAGES luci-theme-argon"
 #PACKAGES="$PACKAGES luci-app-argon-config"
 #PACKAGES="$PACKAGES luci-i18n-argon-config-zh-cn"
 #PACKAGES="$PACKAGES luci-i18n-ttyd-zh-cn"
-PACKAGES="$PACKAGES luci-app-openclash"
 # 判断是否需要编译 Docker 插件
 if [ "$INCLUDE_DOCKER" = "yes" ]; then
     PACKAGES="$PACKAGES luci-i18n-dockerman-zh-cn"
@@ -91,6 +90,13 @@ if echo "$PACKAGES" | grep -q "luci-app-openclash"; then
     wget -q https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat -O files/etc/openclash/GeoIP.dat
     wget -q https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat -O files/etc/openclash/GeoSite.dat
     wget -q https://281.281265.xyz/clash/heicat.yaml -O files/etc/openclash/config/heicat.yaml
+    # Download latest openclash Client
+    URL=$(curl -s https://api.github.com/repos/vernesong/OpenClash/releases/latest \
+      | grep "browser_download_url.*apk" \
+      | head -n1 \
+      | cut -d '"' -f 4)
+    echo "OpenClash latest apk: $URL"
+    wget "$URL" -P /home/build/immortalwrt/packages/
 else
     echo "⚪️ 未选择 luci-app-openclash"
 fi
